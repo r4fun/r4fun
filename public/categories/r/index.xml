@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>R on codex</title>
+    <title>R on r4fun</title>
     <link>/categories/r/</link>
-    <description>Recent content in R on codex</description>
+    <description>Recent content in R on r4fun</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© {2020}</copyright>
