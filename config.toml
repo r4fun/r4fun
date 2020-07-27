@@ -8,6 +8,7 @@ title = "r4fun"
 languageCode = "en-us"
 baseURL = "https://r4fun.dev"
 copyright = "© {2020}"
+enableEmoji = true
 
 # Add your Disqus shortname here.
 # disqusShortname = ""
