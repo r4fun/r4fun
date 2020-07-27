@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>How This Blog Was Made | r4fun</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="A brief explanation of this blog">
+  <meta name="keywords" content="r4fun">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="How This Blog Was Made" />
+  <meta name="twitter:description" content="A brief explanation of this blog"/>
+  <meta name="twitter:site" content="https://twitter.com/tyluRp" />
+  <meta name="twitter:creator" content="https://twitter.com/tyluRp" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/post.min.2cb93c91050d1853bf971cc31e00122edd6e0f405aa1de3b7f8ef67ea3b5a79a.css" integrity="sha256-LLk8kQUNGFO/lxzDHgASLt1uD0Baod47f472fqO1p5o="/>
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/custom.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" integrity="sha256-47DEQpj8HBSa&#43;/TImW&#43;5JCeuQeRkm5NMpJWZG3hSuFU="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/"
+      },
+      "articleSection" : "blog",
+      "name" : "How This Blog Was Made",
+      "headline" : "How This Blog Was Made",
+      "description" : "A brief explanation of this blog",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2020",
+      "datePublished": "2020-07-26 19:36:16 -0700 PDT",
+      "dateModified" : "2020-07-26 19:36:16 -0700 PDT",
+      "url" : "\/blog\/2020-07-26-how-this-blog-was-made\/",
+      "wordCount" : "955",
+      "keywords" : ["r4fun", "Blog"]
+    }
+  
+  </script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" id="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/blog">blog</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">How This Blog Was Made</h1>
+            <time datetime="2020-07-26 19:36:16 -0700 PDT" class="post__date"
+            >Jul 26 2020</time>
+          </header>
+          <article class="post__content">
+              
+
+
+<h2 id="introduction">Introduction<a class="anchor" href="#introduction">#</a></h2>
+
+<p>This blog wasn&rsquo;t made by traditional web developers. It was made by a group of data scientists that mostly write R code, hence the name of this website. The process has been done before but forgotten, so here goes the steps to avoid forgetting once again! When in doubt, check out this <a href="https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/">tutorial</a> by Dean Attali because we&rsquo;ve kept coming back to it for help.</p>
+
+<h2 id="buy-a-domain">Buy a domain<a class="anchor" href="#buy-a-domain">#</a></h2>
+
+<p>We wanted a pretty URL, so buying a domain is the first step. We also wanted to host both RStudio and shiny server on the site so free options like github pages wasn&rsquo;t ideal. Find a domain provider and buy one, we chose <a href="https://domains.google">google</a>.</p>
+
+<h2 id="buy-a-server">Buy a server<a class="anchor" href="#buy-a-server">#</a></h2>
+
+<p>Next is a place to host the website. AWS and digitalocean are popular choices, we went with digitalocean and created an Ubuntu droplet that only costs $15 a month. When you create one, it&rsquo;ll ask you for an authentication method, choose SSH and follow the instructions. In a nutshell they give you the code to run in terminal, it&rsquo;ll generate an SSH key, you copy it and paste it to the digitalocean prompt.</p>
+
+<p>Now we can sign into the server with:</p>
+
+<pre><code class="language-bash">ssh root@&lt;your droplets ip&gt;
+</code></pre>
+
+<h2 id="add-a-non-root-user">Add a non-root user<a class="anchor" href="#add-a-non-root-user">#</a></h2>
+
+<p>Dean&rsquo;s tutorial describes this step as a &ldquo;don&rsquo;t shoot yourself in the foot&rdquo; step. We&rsquo;ll create a non-root user so we have a little less power to break things.</p>
+
+<pre><code class="language-bash">adduser tyler
+gpasswd -a tyler sudo
+su - tyler # login!
+</code></pre>
+
+<h2 id="install-nginx">Install NGINX<a class="anchor" href="#install-nginx">#</a></h2>
+
+<p>NGINX is a web server and sort of organizes the blog, RStudio server, and shiny server. It&rsquo;s also super easy to use with <a href="https://certbot.eff.org">certbot</a>, so we&rsquo;ll have a secure website that uses HTTPS. Run the following to install NGINX:</p>
+
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get -y install nginx
+</code></pre>
+
+<p>After this, if you open a web browser and enter the IP, you should see the NGINX welcome page.</p>
+
+<h2 id="install-r">Install R<a class="anchor" href="#install-r">#</a></h2>
+
+<p>Next step is to get R on the server, we can install it by running the code below. This code was basically copied and pasted from this <a href="https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-18-04">help page</a> by digitalocean.</p>
+
+<pre><code class="language-bash">sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
+sudo apt update
+sudo apt install r-base
+</code></pre>
+
+<h2 id="install-rstudio-server">Install RStudio server<a class="anchor" href="#install-rstudio-server">#</a></h2>
+
+<p>After installing R, we can move onto RStudio server. You can follow the official docs <a href="https://rstudio.com/products/rstudio/download-server/debian-ubuntu/">here</a> for the install process on debian/ubuntu. Essentially, you need to run:</p>
+
+<pre><code class="language-bash">sudo apt-get install gdebi-core
+wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.1056-amd64.deb
+sudo gdebi rstudio-server-1.3.1056-amd64.deb
+</code></pre>
+
+<p>If you want to start adding users, you can do so with <code>adduser joe</code>.</p>
+
+<h2 id="install-shiny-server">Install shiny server<a class="anchor" href="#install-shiny-server">#</a></h2>
+
+<p>Similar to RStudio server, follow the docs <a href="https://rstudio.com/products/shiny/download-server/ubuntu/">here</a> and run this in the terminal:</p>
+
+<pre><code class="language-bash">sudo su - \
+-c &quot;R -e \&quot;install.packages('shiny', repos='https://cran.rstudio.com/')\&quot;&quot;
+sudo apt-get install gdebi-core
+wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.14.948-amd64.deb
+sudo gdebi shiny-server-1.5.14.948-amd64.deb
+</code></pre>
+
+<h2 id="make-the-urls-pretty">Make the URLs pretty<a class="anchor" href="#make-the-urls-pretty">#</a></h2>
+
+<p>If everything has gone well so far, you should be able to access RStudio Server and Shiny Server like so:
+* RStudio Server: ip-address:8787
+* Shiny Server: ip-address:3838</p>
+
+<p>This step basically changes those URLs to:
+* RStudio Server: ip-address/rstudio
+* Shiny Server: ip-address/shiny</p>
+
+<p>To do this, the nginx config file needs to be updated. Start editing by running:</p>
+
+<pre><code class="language-bash">sudo nano /etc/nginx/sites-enabled/default
+</code></pre>
+
+<p>Then add this above the <code>server {</code> part:</p>
+
+<pre><code class="language-bash">map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}
+</code></pre>
+
+<p>In the same file, add this after the <code>server_name_:</code> part:</p>
+
+<pre><code class="language-bash">location /shiny/ {
+  proxy_pass http://127.0.0.1:3838/;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection $connection_upgrade;
+  rewrite ^(/shiny/[^/]+)$ $1/ permanent;
+}
+
+location /rstudio/ {
+  proxy_pass http://127.0.0.1:8787/;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection $connection_upgrade;
+}
+</code></pre>
+
+<p>For things to take effect, run <code>sudo service nginx restart</code> to restart the nginx server. Just a reminder that this stuff is all covered <a href="https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/#reverse-proxy">here</a> with much more detail.</p>
+
+<h2 id="set-up-dns">Set up DNS<a class="anchor" href="#set-up-dns">#</a></h2>
+
+<p>This step varies by domain provider, but for google, you&rsquo;ll want to go to <a href="https://domains.google.com/">https://domains.google.com/</a>, sign in, then click the DNS tab. Add the following digitalocean name servers (assuming you went with digialocean):</p>
+
+<ul>
+<li>ns1.digitalocean.com</li>
+<li>ns2.digitalocean.com</li>
+<li>ns3.digitalocean.com</li>
+</ul>
+
+<p>Now head over to <a href="https://www.digitalocean.com">https://www.digitalocean.com</a>, sign in and click the Networking tab. You should see a text field, enter the domain name you purchased and hit the Add Domain button. Click the newly added domain and you&rsquo;ll see a table of DNS records, you basically need to have:</p>
+
+<pre><code>+------+-----------------+-----------------------+
+| Type | Hostname        | Value                 |
++------+-----------------+-----------------------+
+| A    | www.example.com | your-ip               |
+| A    | example.com     | your-ip               |
+| NS   | example.com     | ns1.digitalocean.com. |
+| NS   | example.com     | ns2.digitalocean.com. |
+| NS   | example.com     | ns3.digitalocean.com. |
++------+-----------------+-----------------------+
+</code></pre>
+
+<p>You may need to wait a couple minutes for things to take effect. We used <a href="https://dnschecker.org">https://dnschecker.org</a> to monitor the status.</p>
+
+<h2 id="https-with-certbot">HTTPS with certbot<a class="anchor" href="#https-with-certbot">#</a></h2>
+
+<p>Head over to <a href="https://certbot.eff.org">https://certbot.eff.org</a>, this site provideds instructions for enabling HTTPS with LetsEncrypt. As a bonus, it&rsquo;ll set up a cron job for automatically renewing the certificate before it expires. Just fill out the forms (what you&rsquo;re using, what OS, etc.) and they&rsquo;ll tell you exactly what you need to do. For this blog, we ran:</p>
+
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot python3-certbot-nginx
+sudo certbot --nginx # enter the domain/url
+sudo certbot renew --dry-run # test auto renewal
+</code></pre>
+
+<h1 id="set-up-shiny-permissions">Set up shiny permissions</h1>
+
+<p>Like everything else covered on this page, a more detailed explaination of this step can be found <a href="https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/#shiny-user-perms">here</a>. This will basically make it so that permission issues don&rsquo;t cause any issues when deploying shiny applications. Somtimes a folder can&rsquo;t be read or written to, this chunk below resolves that:</p>
+
+<pre><code class="language-bash">sudo groupadd shiny-apps
+sudo usermod -aG shiny-apps tyler
+sudo usermod -aG shiny-apps shiny
+cd /srv/shiny-server
+sudo chown -R tyler:shiny-apps .
+sudo chmod g+w .
+sudo chmod g+s .
+</code></pre>
+
+<h1 id="install-git">Install git</h1>
+
+<p>Finally, install git! You&rsquo;ll need it for pulling code to and from the server.</p>
+
+<pre><code class="language-bash">sudo apt-get -y install git
+</code></pre>
+
+
+              
+          </article>
+          
+
+ <div class="pagination">
+  
+
+  
+</div>
+
+          
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a class="social-icons__link" title="Twitter"
+         href="https://twitter.com/tyluRp"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a class="social-icons__link" title="GitHub"
+         href="https://github.com/r4fun"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+     
+</div>
+
+            <p>© {2020}</p>
+          </footer>
+          </div>
+      </div>
+      
+      <div class="toc-container">
+          
+        <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#buy-a-domain">Buy a domain</a></li>
+<li><a href="#buy-a-server">Buy a server</a></li>
+<li><a href="#add-a-non-root-user">Add a non-root user</a></li>
+<li><a href="#install-nginx">Install NGINX</a></li>
+<li><a href="#install-r">Install R</a></li>
+<li><a href="#install-rstudio-server">Install RStudio server</a></li>
+<li><a href="#install-shiny-server">Install shiny server</a></li>
+<li><a href="#make-the-urls-pretty">Make the URLs pretty</a></li>
+<li><a href="#set-up-dns">Set up DNS</a></li>
+<li><a href="#https-with-certbot">HTTPS with certbot</a></li>
+</ul></li>
+<li><a href="#set-up-shiny-permissions">Set up shiny permissions</a></li>
+<li><a href="#install-git">Install git</a></li>
+</ul>
+</nav>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.49e4d8a384357d9b445b87371863419937ede9fa77737522ffb633073aebfa44.js" integrity="sha256-SeTYo4Q1fZtEW4c3GGNBmTft6fp3c3Ui/7YzBzrr&#43;kQ=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+    <script src="/js/table-of-contents.js"></script>
+  
+
+
+</body>
+
+</html>

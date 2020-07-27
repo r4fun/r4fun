@@ -2,12 +2,12 @@
 <html lang="en-us">
 
 <head>
-  <title>Math Typesetting | r4fun</title>
+  <title>How This Site Was Made | r4fun</title>
 
   <meta charset="UTF-8">
   <meta name="language" content="en">
-  <meta name="description" content="A brief guide to setup KaTeX">
-  <meta name="keywords" content="gohugo , hugo , go , blog">
+  <meta name="description" content="A brief explanation of this site">
+  <meta name="keywords" content="r4fun">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,8 +15,8 @@
   
   
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Math Typesetting" />
-  <meta name="twitter:description" content="A brief guide to setup KaTeX"/>
+  <meta name="twitter:title" content="How This Site Was Made" />
+  <meta name="twitter:description" content="A brief explanation of this site"/>
   <meta name="twitter:site" content="https://twitter.com/tyluRp" />
   <meta name="twitter:creator" content="https://twitter.com/tyluRp" />
   
@@ -54,9 +54,9 @@
             "@id": "\/"
       },
       "articleSection" : "blog",
-      "name" : "Math Typesetting",
-      "headline" : "Math Typesetting",
-      "description" : "A brief guide to setup KaTeX",
+      "name" : "How This Site Was Made",
+      "headline" : "How This Site Was Made",
+      "description" : "A brief explanation of this site",
       "inLanguage" : "en-US",
       "author" : "",
       "creator" : "",
@@ -64,11 +64,11 @@
       "accountablePerson" : "",
       "copyrightHolder" : "",
       "copyrightYear" : "2020",
-      "datePublished": "2020-06-05 00:00:00 \x2b0000 UTC",
-      "dateModified" : "2020-06-05 00:00:00 \x2b0000 UTC",
-      "url" : "\/blog\/math-typesetting\/",
-      "wordCount" : "119",
-      "keywords" : ["gohugo", "hugo", "go", "blog", "Blog"]
+      "datePublished": "2020-07-26 19:36:16 -0700 PDT",
+      "dateModified" : "2020-07-26 19:36:16 -0700 PDT",
+      "url" : "\/blog\/2020-07-26-how-this-site-was-made\/",
+      "wordCount" : "1",
+      "keywords" : ["r4fun", "Blog"]
     }
   
   </script>
@@ -109,80 +109,24 @@
       <div class="post__container">
         <div class="post">
           <header class="post__header">
-            <h1 id="post__title">Math Typesetting</h1>
-            <time datetime="2020-06-05 00:00:00 &#43;0000 UTC" class="post__date"
-            >Jun 5 2020</time>
+            <h1 id="post__title">How This Site Was Made</h1>
+            <time datetime="2020-07-26 19:36:16 -0700 PDT" class="post__date"
+            >Jul 26 2020</time>
           </header>
           <article class="post__content">
               
-<p>Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.</p>
 
-<p>In this example we will be using <a href="https://katex.org/">KaTeX</a></p>
 
-<ul>
-<li>Create a partial under <code>/layouts/partials/math.html</code></li>
-<li>Within this partial reference the <a href="https://katex.org/docs/autorender.html">Auto-render Extension</a> or host these scripts locally.</li>
+<h1 id="introduction">Introduction</h1>
 
-<li><p>Include the partial in your templates like so:</p>
 
-<pre><code>{{ if or .Params.math .Site.Params.math }}
-{{ partial &quot;math.html&quot; . }}
-{{ end }}
-</code></pre></li>
-
-<li><p>To enable KaTex globally set the parameter <code>math</code> to <code>true</code> in a project&rsquo;s configuration</p></li>
-
-<li><p>To enable KaTex on a per page basis include the parameter <code>math: true</code> in content files.</p></li>
-</ul>
-
-<p><strong>Note:</strong> Use the online reference of <a href="https://katex.org/docs/supported.html">Supported TeX Functions</a>
-</p>
-
-<h3 id="examples">Examples<a class="anchor" href="#examples">#</a></h3>
-
-<p>Inline math: $$ \varphi = \dfrac{1+\sqrt5}{2}= 1.6180339887… $$</p>
-
-<p>Block math:</p>
-
-<p>$$
-\sigma(t) = \cfrac{1}{1 + e^{-t}}
-$$</p>
-
-              
-                  
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-            showMathMenu: false, //disables context menu
-            tex2jax: {
-            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
-           }
-    });
-</script>
               
           </article>
           
 
-<ul class="tags__list">
-    
-    <li class="tag__item">
-        <a class="tag__link" href="/tags/math/">math</a>
-    </li></ul>
-
  <div class="pagination">
   
-    <a class="pagination__item" href="/blog/rich-text/">
-        <span class="pagination__label">Previous Post</span>
-        <span class="pagination__title">Rich Content</span>
-    </a>
-  
 
-  
-    <a class="pagination__item" href="/blog/markdown-syntax-guide/">
-      <span class="pagination__label">Next Post</span>
-      <span class="pagination__title" >Markdown Syntax Guide</a>
-    </a>
   
 </div>
 
@@ -236,6 +180,15 @@ $$</p>
           </div>
       </div>
       
+      <div class="toc-container">
+          
+        <nav id="TableOfContents">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+</ul>
+</nav>
+      </div>
+      
     </div>
     
 
@@ -253,6 +206,8 @@ $$</p>
   <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
     data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
 
+  
+    <script src="/js/table-of-contents.js"></script>
   
 
 
