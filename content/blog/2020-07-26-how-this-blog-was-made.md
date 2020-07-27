@@ -166,7 +166,7 @@ sudo certbot --nginx # enter the domain/url
 sudo certbot renew --dry-run # test auto renewal
 ```
 
-# Set up shiny permissions
+## Set up shiny permissions
 
 Like everything else covered on this page, a more detailed explaination of this step can be found [here](https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/#shiny-user-perms). This will basically make it so that permission issues don't cause any issues when deploying shiny applications. Somtimes a folder can't be read or written to, this chunk below resolves that:
 
@@ -180,7 +180,7 @@ sudo chmod g+w .
 sudo chmod g+s .
 ```
 
-# Install git
+## Install git
 
 Finally, install git! You'll need it for pulling code to and from the server.
 
