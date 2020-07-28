@@ -1,0 +1,189 @@
+---
+title: "How This Blog Was Made"
+description: "A brief explanation of this blog"
+date: 2020-07-26T19:36:16-07:00
+keywords: ["r4fun"]
+draft: true
+toc: true
+---
+
+## Introduction
+
+This blog wasn't made by traditional web developers. It was made by a group of data scientists that mostly write R code, hence the name of this website. The process has been done before but forgotten, so here goes the steps to avoid forgetting once again! When in doubt, check out this [tutorial](https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/) by Dean Attali because we've kept coming back to it for help.
+
+## Buy a domain
+
+We wanted a pretty URL, so buying a domain is the first step. We also wanted to host both RStudio and shiny server on the site so free options like github pages wasn't ideal. Find a domain provider and buy one, we chose [google](https://domains.google).
+
+## Buy a server
+
+Next is a place to host the website. AWS and digitalocean are popular choices, we went with digitalocean and created an Ubuntu droplet that only costs $15 a month. When you create one, it'll ask you for an authentication method, choose SSH and follow the instructions. In a nutshell they give you the code to run in terminal, it'll generate an SSH key, you copy it and paste it to the digitalocean prompt.
+
+Now we can sign into the server with:
+
+```bash
+ssh root@<your droplets ip>
+```
+
+## Add a non-root user
+
+Dean's tutorial describes this step as a "don't shoot yourself in the foot" step. We'll create a non-root user so we have a little less power to break things.
+
+```bash
+adduser tyler
+gpasswd -a tyler sudo
+su - tyler # login!
+```
+
+## Install NGINX
+
+NGINX is a web server and sort of organizes the blog, RStudio server, and shiny server. It's also super easy to use with [certbot](https://certbot.eff.org), so we'll have a secure website that uses HTTPS. Run the following to install NGINX:
+
+```bash
+sudo apt-get update
+sudo apt-get -y install nginx
+```
+
+After this, if you open a web browser and enter the IP, you should see the NGINX welcome page.
+
+## Install R
+
+Next step is to get R on the server, we can install it by running the code below. This code was basically copied and pasted from this [help page](https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-18-04) by digitalocean.
+
+```bash
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/'
+sudo apt update
+sudo apt install r-base
+```
+
+## Install RStudio server
+
+After installing R, we can move onto RStudio server. You can follow the official docs [here](https://rstudio.com/products/rstudio/download-server/debian-ubuntu/) for the install process on debian/ubuntu. Essentially, you need to run:
+
+```bash
+sudo apt-get install gdebi-core
+wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.1056-amd64.deb
+sudo gdebi rstudio-server-1.3.1056-amd64.deb
+```
+
+If you want to start adding users, you can do so with `adduser joe`.
+
+## Install shiny server
+
+Similar to RStudio server, follow the docs [here](https://rstudio.com/products/shiny/download-server/ubuntu/) and run this in the terminal:
+
+```bash
+sudo su - \
+-c "R -e \"install.packages('shiny', repos='https://cran.rstudio.com/')\""
+sudo apt-get install gdebi-core
+wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.14.948-amd64.deb
+sudo gdebi shiny-server-1.5.14.948-amd64.deb
+```
+
+## Make the URLs pretty
+
+If everything has gone well so far, you should be able to access RStudio Server and Shiny Server like so:
+* RStudio Server: ip-address:8787
+* Shiny Server: ip-address:3838
+
+This step basically changes those URLs to:
+* RStudio Server: ip-address/rstudio
+* Shiny Server: ip-address/shiny
+
+To do this, the nginx config file needs to be updated. Start editing by running:
+
+```bash
+sudo nano /etc/nginx/sites-enabled/default
+```
+
+Then add this above the `server {` part:
+
+```bash
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}
+```
+
+In the same file, add this after the `server_name_:` part:
+
+```bash
+location /shiny/ {
+  proxy_pass http://127.0.0.1:3838/;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection $connection_upgrade;
+  rewrite ^(/shiny/[^/]+)$ $1/ permanent;
+}
+
+location /rstudio/ {
+  proxy_pass http://127.0.0.1:8787/;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection $connection_upgrade;
+}
+```
+
+For things to take effect, run `sudo service nginx restart` to restart the nginx server. Just a reminder that this stuff is all covered [here](https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/#reverse-proxy) with much more detail.
+
+## Set up DNS
+
+This step varies by domain provider, but for google, you'll want to go to https://domains.google.com/, sign in, then click the DNS tab. Add the following digitalocean name servers (assuming you went with digialocean):
+
+* ns1.digitalocean.com
+* ns2.digitalocean.com
+* ns3.digitalocean.com
+
+Now head over to https://www.digitalocean.com, sign in and click the Networking tab. You should see a text field, enter the domain name you purchased and hit the Add Domain button. Click the newly added domain and you'll see a table of DNS records, you basically need to have:
+
+```
++------+-----------------+-----------------------+
+| Type | Hostname        | Value                 |
++------+-----------------+-----------------------+
+| A    | www.example.com | your-ip               |
+| A    | example.com     | your-ip               |
+| NS   | example.com     | ns1.digitalocean.com. |
+| NS   | example.com     | ns2.digitalocean.com. |
+| NS   | example.com     | ns3.digitalocean.com. |
++------+-----------------+-----------------------+
+```
+
+You may need to wait a couple minutes for things to take effect. We used https://dnschecker.org to monitor the status.
+
+## HTTPS with certbot
+
+Head over to https://certbot.eff.org, this site provideds instructions for enabling HTTPS with LetsEncrypt. As a bonus, it'll set up a cron job for automatically renewing the certificate before it expires. Just fill out the forms (what you're using, what OS, etc.) and they'll tell you exactly what you need to do. For this blog, we ran:
+
+```bash
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot python3-certbot-nginx
+sudo certbot --nginx # enter the domain/url
+sudo certbot renew --dry-run # test auto renewal
+```
+
+## Set up shiny permissions
+
+Like everything else covered on this page, a more detailed explaination of this step can be found [here](https://deanattali.com/2015/05/09/setup-rstudio-shiny-server-digital-ocean/#shiny-user-perms). This will basically make it so that permission issues don't cause any issues when deploying shiny applications. Somtimes a folder can't be read or written to, this chunk below resolves that:
+
+```bash
+sudo groupadd shiny-apps
+sudo usermod -aG shiny-apps tyler
+sudo usermod -aG shiny-apps shiny
+cd /srv/shiny-server
+sudo chown -R tyler:shiny-apps .
+sudo chmod g+w .
+sudo chmod g+s .
+```
+
+## Install git
+
+Finally, install git! You'll need it for pulling code to and from the server.
+
+```bash
+sudo apt-get -y install git
+```
