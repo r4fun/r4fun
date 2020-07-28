@@ -3,8 +3,7 @@ title: "How This Blog Was Made"
 description: "A brief explanation of this blog"
 date: 2020-07-26T19:36:16-07:00
 keywords: ["r4fun"]
-draft: true
-toc: true
+draft: false
 ---
 
 ## Introduction
