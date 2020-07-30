@@ -3,26 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/</loc>
+    <loc>https://r4fun.dev/</loc>
     <lastmod>2020-07-26T19:36:16-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/</loc>
+    <loc>https://r4fun.dev/blog/</loc>
     <lastmod>2020-07-26T19:36:16-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2020-07-26-how-this-blog-was-made/</loc>
+    <loc>https://r4fun.dev/blog/2020-07-26-how-this-blog-was-made/</loc>
     <lastmod>2020-07-26T19:36:16-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/categories/</loc>
+    <loc>https://r4fun.dev/categories/</loc>
   </url>
   
   <url>
-    <loc>/tags/</loc>
+    <loc>https://r4fun.dev/tags/</loc>
   </url>
   
 </urlset>

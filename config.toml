@@ -14,7 +14,7 @@ enableEmoji = true
 # disqusShortname = ""
 
 # Add your Google Analytics identifier: UA-XXXXXXXX-X
-# googleAnalytics = ""
+googleAnalytics = "UA-135464357-3"
 
 # Optional params
 [params]
